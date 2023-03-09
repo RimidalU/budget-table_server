@@ -1,6 +1,7 @@
 import express from "express"
 import * as dotenv from 'dotenv' 
 import mongoose from 'mongoose'
+import cors from 'cors'
 
 import { rowCreateValidation, rowUpdateValidation } from "./validations/row.js"
 import { RowController } from "./controllers/index.js"
@@ -10,6 +11,7 @@ const app = express()
 
 dotenv.config()
 app.use(express.json())
+app.use(cors())
 
 mongoose.connect(process.env.MONGODB_CONNECT_LINK)
   .then(() => { console.log('MongoDB connect OK!') })
