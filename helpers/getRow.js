@@ -1,9 +1,10 @@
-export const getRow = (row) => {
+export const getRow = (row, full = null) => {
     const {
         equipmentCosts, estimatedProfit, machineOperatorSalary, mainCosts, materials,
         mimExploitation, overheads, rowName, salary, supportCosts, total, parentId, _id
     } = row
-    return {
+
+    const neatRow = {
         equipmentCosts,
         estimatedProfit,
         machineOperatorSalary,
@@ -15,7 +16,14 @@ export const getRow = (row) => {
         salary,
         supportCosts,
         total,
-        parentId: parentId === null ? null : parentId.toString(),
         id: _id.toString(),
     }
+    if (!full) {
+        return neatRow
+    }
+    return {
+        ...neatRow,
+        parentId: parentId === null ? null : parentId.toString(),
+    }
 }
+

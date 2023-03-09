@@ -24,7 +24,12 @@ export const create = async (req, res) => {
         })
 
         const row = await newRow.save()
-        res.status(200).json(row)
+        res.status(200).json(
+            {
+                "changed": [],
+                "current": getRow(row)
+            }
+        )
 
     } catch (error) {
         res.status(500).json({
@@ -40,7 +45,7 @@ export const update = async (req, res) => {
         const rowId = req.params.id
         const {
             equipmentCosts, estimatedProfit, machineOperatorSalary, mainCosts, materials,
-            mimExploitation, overheads, rowName, salary, supportCosts, total, parentId
+            mimExploitation, overheads, rowName, salary, supportCosts, total
         } = req.body
 
 
@@ -59,8 +64,9 @@ export const update = async (req, res) => {
                 salary,
                 supportCosts,
                 total,
-            })
-
+            },
+            { new: true }
+        )
         if (!row) {
             return res.status(404).json({
                 success: false,
@@ -68,7 +74,8 @@ export const update = async (req, res) => {
             })
         }
         res.status(200).json({
-            success: true
+            "changed": [],
+            "current": getRow(row)
         })
     } catch (error) {
         res.status(500).json({
@@ -83,7 +90,7 @@ export const getAll = async (req, res) => {
     try {
         const rows = await RowModel.find()
 
-        const neatRow = rows.map(getRow)
+        const neatRow = rows.map(row => getRow(row, true))
         const treeRows = getTree(neatRow)
         res.status(200).json(treeRows)
 
@@ -109,10 +116,10 @@ export const remove = async (req, res) => {
             })
         }
         res.status(200).json({
-            success: true,
+            "changed": [],
+            "current": null
         })
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             success: false,
             message: 'Failed to remove row.',

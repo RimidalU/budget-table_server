@@ -1,5 +1,5 @@
 import express from "express"
-import * as dotenv from 'dotenv' 
+import * as dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import cors from 'cors'
 
@@ -8,14 +8,14 @@ import { RowController } from "./controllers/index.js"
 
 
 const app = express()
+app.use(cors())
 
 dotenv.config()
 app.use(express.json())
-app.use(cors())
 
 mongoose.connect(process.env.MONGODB_CONNECT_LINK)
-  .then(() => { console.log('MongoDB connect OK!') })
-  .catch((err) => { console.log(`MongoDB connect Error: ${err}`) })
+    .then(() => { console.log('MongoDB connect OK!') })
+    .catch((err) => { console.log(`MongoDB connect Error: ${err}`) })
 
 const port = process.env.PORT || 4000
 const prefix = process.env.PREFIX
